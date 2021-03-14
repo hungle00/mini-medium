@@ -1,67 +1,64 @@
 <p id="notice"><%= notice %></p>
+<div class="row">
+  <div class="col-8">
+    <h1 class="mt-2"><%= @article.title %>
 
-<p>
-  <strong>Title:</strong>
-  <%= @article.title %>
-</p>
+    <p class="lead">
+      Author: <%= link_to @author, profile_path(@author) %></li>
+    </p>
 
-<p>
-  <strong>Author</strong>
-  <%= link_to @author, profile_path(@author) %></li>
-</p>
+    <p>
+      Description:<%= @article.description %>
+    </p>
+    <%= @article.body %>
 
-<p>
-  <strong>Body:</strong>
-  <%= @article.body %>
-</p>
+    <p>
+      <strong>Favorite count</strong>
+      <%= @article.favorites_count %>
+    </p>
 
-<p>
-  <strong>Description:</strong>
-  <%= @article.description %>
-</p>
+    <%= link_to "Upvote", article_favorite_path(@article), remote: true, method: :post %>
+    <%= link_to "Downvote", article_favorite_path(@article), remote: true, method: :delete %>
 
-<p>
-  <strong>Favorite count</strong>
-  <%= @article.favorites_count %>
-</p>
+    <br />
 
-<%= link_to "Upvote", article_favorite_path(@article), remote: true, method: :post %>
-<%= link_to "Downvote", article_favorite_path(@article), remote: true, method: :delete %>
-
-<p><strong>Tags</strong></p>
-<ul>
-  <% @article.tag_list.each do |tag| %>
-    <li><%= link_to tag, tagged_path(tag: tag) %></li>
-  <% end %></p>
-</ul>
-
-<p><strong>Articles same tag</strong></p>
-<ul>
- <% @article.find_related_tags.each do |r| %>
-    <li><%= link_to r.title, article_path(slug: r.slug)  %></li>
-  <% end %>
-</ul>
-
-<br>
-
-<div class="card mb-3">
-    <div class="card-header">
-        <h4 class="mb-0">Add A Comment:</h4>
+    <div class="card mb-3">
+      <div class="card-header">
+          <h4 class="mb-0">Add A Comment:</h4>
+      </div>
+      <div class="card-body">
+          <%# NOTE COMMENT STEP 3: Load the comment form. %>
+          <%= render "comments/form" %>
+      </div>
+    </div>  
+    <div class="card mb-3">
+      <div class="card-header">
+          <h4>Comments:</h4>
+      </div>
+      <%# NOTE COMMENT STEP 3: Wrap the comments in `<div id="comments">` so that you can select the wrapper when using javascript in `app/views/comments/create.js.erb`. %>
+      <div id="comments" class="card-body">
+          <%= render @article.comments %>
+      </div>
     </div>
-    <div class="card-body">
-        <%# NOTE COMMENT STEP 3: Load the comment form. %>
-        <%= render "comments/form" %>
-    </div>
+  </div>
+
+  <div class="col-4">
+    <p><strong>Tags</strong></p>
+    <ul>
+      <% @article.tag_list.each do |tag| %>
+        <li><%= link_to tag, tagged_path(tag: tag) %></li>
+      <% end %></p>
+    </ul>
+
+    <p><strong>Articles same tag</strong></p>
+    <ul>
+    <% @article.find_related_tags.each do |r| %>
+        <li><%= link_to r.title, article_path(slug: r.slug)  %></li>
+      <% end %>
+    </ul>
+
+    <%= link_to 'Edit', edit_article_path(@article) %> |
+    <%= link_to 'Back', articles_path %>
+  </div>
+
 </div>
-<div class="card mb-3">
-    <div class="card-header">
-        <h4>Comments:</h4>
-    </div>
-    <%# NOTE COMMENT STEP 3: Wrap the comments in `<div id="comments">` so that you can select the wrapper when using javascript in `app/views/comments/create.js.erb`. %>
-    <div id="comments" class="card-body">
-        <%= render @article.comments %>
-    </div>
-</div>
-
-<%= link_to 'Edit', edit_article_path(@article) %> |
-<%= link_to 'Back', articles_path %>

@@ -54,6 +54,23 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
+  #config.log_tags = [:request_id]
+  #config.log_level = :debug
+
+  config.lograge.enabled = true
+  config.lograge.formatter = Lograge::Formatters::Json.new
+  config.lograge.custom_options = lambda do |event|
+    { 
+      :request_time => Time.now,
+      host: event.payload[:host],
+      :params => event.payload[:params],
+      :level => event.payload[:level],
+
+    }
+  end
+
+  config.lograge.keep_original_rails_log = true
+  config.lograge.logger = ActiveSupport::Logger.new "#{Rails.root}/log/lograge_#{Rails.env}.log"
   # Raises error for missing translations.
   # config.action_view.raise_on_missing_translations = true
 

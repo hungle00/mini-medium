@@ -5,6 +5,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   
   has_one_attached :avatar
+
+  extend FriendlyId
+  friendly_id :username, use: :slugged
   
   has_many :articles, dependent: :destroy
   has_many :notifications, dependent: :destroy

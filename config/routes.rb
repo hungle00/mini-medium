@@ -8,14 +8,14 @@ Rails.application.routes.draw do
   get '/tagged', to: "home#tagged", as: :tagged
   get 'feed' => 'home#feed'
 
-  resources :articles, param: :slug do
+  resources :articles do
     resource :favorite, only: %i[create destroy]
     resources :comments
   end
   resources :notifications, only: [:index]
   resources :tags, only: [:index]
 
-  resources :profiles, param: :username, only: [:show] do
+  resources :profiles, only: [:show] do
     member do
       get :following, :followers
     end
